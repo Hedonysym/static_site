@@ -4,33 +4,25 @@ from textnode import *
 from htmlnode import *
 
 
-class TestParentNode(unittest.TestCase):
+class TestNodeConversion(unittest.TestCase):
     def test_1(self):
-        child_node = LeafNode("span", "child")
-        parent_node = ParentNode("div", [child_node])
-        self.assertEqual(parent_node.to_html(), "<div><span>child</span></div>")
+        node = TextNode("This is a text node", TextType.TEXT)
+        html_node = text_node_to_html_node(node)
+        self.assertEqual(html_node.tag, None)
+        self.assertEqual(html_node.value, "This is a text node")
+    
+    def test2(self):
+        node = TextNode("This is a text node", TextType.BOLD)
+        html_node = text_node_to_html_node(node)
+        self.assertEqual(html_node.tag, "b")
+        self.assertEqual(html_node.value, "This is a text node")
 
-    def test_2(self):
-        grandchild_node = LeafNode("b", "grandchild")
-        child_node = ParentNode("span", [grandchild_node])
-        parent_node = ParentNode("div", [child_node])
-        self.assertEqual(
-           parent_node.to_html(),
-           "<div><span><b>grandchild</b></span></div>")
-
-    def test_3(self):
-        node1 = LeafNode("b", "bold")
-        node2 = LeafNode("i", "image", {"url": "bs.com"})
-        node3 = LeafNode(None, "normal")
-        parent = ParentNode("p", [node1, node2, node3])
-        self.assertEqual(
-            parent.to_html(),
-            '<p><b>bold</b><i url="bs.com">image</i>normal</p>'
-        )
-
-    def test_4(self):
-        node = ParentNode("p", None)
-        self.assertRaises(ValueError)
+    def test3(self):
+        node = TextNode("This is a text node", TextType.IMAGE, "piss.shit")
+        html_node = text_node_to_html_node(node)
+        self.assertEqual(html_node.tag, "img")
+        self.assertEqual(html_node.value, "")
+        self.assertEqual(html_node.props, {"src": "piss.shit", "alt": "This is a text node"})
 
 if __name__ == "__main__":
     unittest.main()
