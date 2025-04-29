@@ -2,27 +2,29 @@ import unittest
 
 from textnode import *
 from htmlnode import *
+from parser import split_nodes_delimiter
 
 
-class TestNodeConversion(unittest.TestCase):
+class TestTextNodeDelimiter(unittest.TestCase):
     def test_1(self):
-        node = TextNode("This is a text node", TextType.TEXT)
-        html_node = text_node_to_html_node(node)
-        self.assertEqual(html_node.tag, None)
-        self.assertEqual(html_node.value, "This is a text node")
-    
-    def test2(self):
-        node = TextNode("This is a text node", TextType.BOLD)
-        html_node = text_node_to_html_node(node)
-        self.assertEqual(html_node.tag, "b")
-        self.assertEqual(html_node.value, "This is a text node")
+        node = TextNode("This is text with a `code block` word", TextType.TEXT)
+        new_nodes = split_nodes_delimiter([node], "`", TextType.CODE)
+        print(new_nodes)
+        self.assertEqual(new_nodes, [
+    TextNode("This is text with a ", TextType.TEXT, None),
+    TextNode("code block", TextType.CODE, None),
+    TextNode(" word", TextType.TEXT, None),
+    ])
 
-    def test3(self):
-        node = TextNode("This is a text node", TextType.IMAGE, "piss.shit")
-        html_node = text_node_to_html_node(node)
-        self.assertEqual(html_node.tag, "img")
-        self.assertEqual(html_node.value, "")
-        self.assertEqual(html_node.props, {"src": "piss.shit", "alt": "This is a text node"})
+    def test2(self):
+        node = TextNode("This is text with a **bold** word", TextType.TEXT)
+        new_nodes = split_nodes_delimiter([node], "*", TextType.BOLD)
+        print(new_nodes)
+        self.assertEqual(new_nodes, [
+    TextNode("This is text with a ", TextType.TEXT, None),
+    TextNode("bold", TextType.BOLD, None),
+    TextNode(" word", TextType.TEXT, None),])
+
 
 if __name__ == "__main__":
     unittest.main()
