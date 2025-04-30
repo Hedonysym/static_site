@@ -90,3 +90,39 @@ def text_to_textnodes(text):
     nodes = split_nodes_image(nodes)
     nodes = split_nodes_link(nodes)
     return nodes
+
+def markdown_to_blocks(markdown):
+    md_blocks = markdown.split("\n\n")
+    new_blocks = []
+    for block in md_blocks:
+        strip_block = block.strip()
+        if strip_block != '':
+            new_blocks.append(strip_block)
+    return new_blocks
+
+class BlockType(Enum):
+    PARAGRAPH = "paragraph"
+    HEADING = "heading"
+    CODE = "code"
+    QUOTE = "quote"
+    UNORDERED_LIST = "unordered list"
+    ORDERED_LIST = "ordered list"
+
+def block_to_block_type(block):
+    block_lines = block.splitlines()
+    if re.match(r"^#{1,6}\s", block) != None:
+        return BlockType.HEADING
+    elif re.search(r"^```", block) != None and re.search(r"```$", block) != None:
+        return BlockType.CODE
+    elif len(block_lines) == len(re.findall(r">\s*?.*", block)):
+        return BlockType.QUOTE
+    elif len(block_lines) == len(re.findall(r"-\s*?.*", block)):
+        return BlockType.UNORDERED_LIST
+    elif len(block_lines) == len(re.findall(r"\d*\s*?.*", block)):
+        return BlockType.ORDERED_LIST
+    return BlockType.PARAGRAPH
+
+def markdown_to_html_node(markdown):
+    blocks = markdown_to_blocks(markdown)
+    for block in blocks:
+        

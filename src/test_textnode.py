@@ -6,20 +6,25 @@ from parser import *
 
 
 class TestTextNodeimageandurlgrab(unittest.TestCase):
-    def test_1(self):
-        text = "This is **text** with an _italic_ word and a `code block` and an ![obi wan image](https://i.imgur.com/fJRm4Vk.jpeg) and a [link](https://boot.dev)"
-        self.assertEqual(text_to_textnodes(text), [
-    TextNode("This is ", TextType.TEXT),
-    TextNode("text", TextType.BOLD),
-    TextNode(" with an ", TextType.TEXT),
-    TextNode("italic", TextType.ITALIC),
-    TextNode(" word and a ", TextType.TEXT),
-    TextNode("code block", TextType.CODE),
-    TextNode(" and an ", TextType.TEXT),
-    TextNode("obi wan image", TextType.IMAGE, "https://i.imgur.com/fJRm4Vk.jpeg"),
-    TextNode(" and a ", TextType.TEXT),
-    TextNode("link", TextType.LINK, "https://boot.dev"),
-])
+    def test1(self):
+        block = "### fuck"
+        self.assertEqual(block_to_block_type(block), BlockType.HEADING)
+
+    def test2(self):
+        block = "####### fuck"
+        self.assertEqual(block_to_block_type(block), BlockType.PARAGRAPH)
+
+    def test3(self):
+        block = "> fuck\n> you\n >bitch"
+        self.assertEqual(block_to_block_type(block), BlockType.QUOTE)
+    
+    def test4(self):
+        block = "- shit\n- piss\n# fuck"
+        self.assertEqual(block_to_block_type(block), BlockType.PARAGRAPH)
+    
+    def test5(self):
+        block = "```\nfuck = shit.piss\n```"
+        self.assertEqual(block_to_block_type(block), BlockType.CODE)
 
         
 
