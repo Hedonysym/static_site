@@ -1,6 +1,17 @@
-from htmlnode import *
-from textnode import *
 import re
+
+from textnode import TextNode, TextType
+
+
+def text_to_textnodes(text):
+    nodes = [TextNode(text, TextType.TEXT)]
+    nodes = split_nodes_delimiter(nodes, "**", TextType.BOLD)
+    nodes = split_nodes_delimiter(nodes, "_", TextType.ITALIC)
+    nodes = split_nodes_delimiter(nodes, "`", TextType.CODE)
+    nodes = split_nodes_image(nodes)
+    nodes = split_nodes_link(nodes)
+    return nodes
+
 
 def split_nodes_delimiter(old_nodes, delimiter, text_type):
     new_nodes = []
@@ -22,11 +33,6 @@ def split_nodes_delimiter(old_nodes, delimiter, text_type):
         new_nodes.extend(split_nodes)
     return new_nodes
 
-def extract_markdown_images(text):
-    return re.findall(r"!\[(.*?)\]\((http.*?)\)", text)
-
-def extract_markdown_links(text):
-    return re.findall(r"[^!]\[(.*?)\]\((http.*?)\)", text)
 
 def split_nodes_image(old_nodes):
     new_nodes = []
@@ -82,47 +88,13 @@ def split_nodes_link(old_nodes):
     return new_nodes
 
 
-def text_to_textnodes(text):
-    nodes = [TextNode(text, TextType.TEXT)]
-    nodes = split_nodes_delimiter(nodes, "**", TextType.BOLD)
-    nodes = split_nodes_delimiter(nodes, "_", TextType.ITALIC)
-    nodes = split_nodes_delimiter(nodes, "`", TextType.CODE)
-    nodes = split_nodes_image(nodes)
-    nodes = split_nodes_link(nodes)
-    return nodes
+def extract_markdown_images(text):
+    pattern = r"!\[([^\[\]]*)\]\(([^\(\)]*)\)"
+    matches = re.findall(pattern, text)
+    return matches
 
-def markdown_to_blocks(markdown):
-    md_blocks = markdown.split("\n\n")
-    new_blocks = []
-    for block in md_blocks:
-        strip_block = block.strip()
-        if strip_block != '':
-            new_blocks.append(strip_block)
-    return new_blocks
 
-class BlockType(Enum):
-    PARAGRAPH = "paragraph"
-    HEADING = "heading"
-    CODE = "code"
-    QUOTE = "quote"
-    UNORDERED_LIST = "unordered list"
-    ORDERED_LIST = "ordered list"
-
-def block_to_block_type(block):
-    block_lines = block.splitlines()
-    if re.match(r"^#{1,6}\s", block) != None:
-        return BlockType.HEADING
-    elif re.search(r"^```", block) != None and re.search(r"```$", block) != None:
-        return BlockType.CODE
-    elif len(block_lines) == len(re.findall(r">\s*?.*", block)):
-        return BlockType.QUOTE
-    elif len(block_lines) == len(re.findall(r"-\s*?.*", block)):
-        return BlockType.UNORDERED_LIST
-    elif len(block_lines) == len(re.findall(r"\d*\s*?.*", block)):
-        return BlockType.ORDERED_LIST
-    return BlockType.PARAGRAPH
-
-def markdown_to_html_node(markdown):
-    blocks = markdown_to_blocks(markdown)
-    for block in blocks:
-        
+def extract_markdown_links(text):
+    pattern = r"(?<!!)\[([^\[\]]*)\]\(([^\(\)]*)\)"
+    matches = re.findall(pattern, text)
+    return matches
