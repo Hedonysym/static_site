@@ -1,8 +1,8 @@
 from textnode import *
+import copy_static
 
 def main():
-    cockbama = TextNode("bitchass", TextType.IMAGE, "www.niggerfaggot.com")
-    print(cockbama.__repr__())
+   copy_static.public_to_static()
 
 
 if __name__ == "__main__":
