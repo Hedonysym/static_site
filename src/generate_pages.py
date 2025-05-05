@@ -16,12 +16,7 @@ def generate_page(from_path, template_path, dest_path, basepath):
     title = extract_title(mdtext)
     htmlnodes = markdown_to_html_node(mdtext)
     content = htmlnodes.to_html()
-    new_html = htmltemplate.replace("{{ Title }}", title).replace("{{ Content }}", content).replace(
-        'href="/', f'href"{basepath}'
-    ).replace(
-        'src="/', f'src="{basepath}'
-    )
-    
+    new_html = htmltemplate.replace("{{ Title }}", title).replace("{{ Content }}", content).replace('href="/', f'href="{basepath}').replace('src="/', f'src="{basepath}')
     newpath = dest_path.replace(".md", ".html")
     os.makedirs(os.path.dirname(newpath), exist_ok=True)
     with open(newpath, "w", encoding="utf-8") as file:
