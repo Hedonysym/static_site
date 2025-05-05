@@ -8,18 +8,18 @@ base_dir = os.path.dirname(__file__)
 public_path = os.path.join(base_dir, "../public/")
 static_path = os.path.join(base_dir, "../static/")
 
-def clear_public():
-    if os.path.exists(public_path) == True:
-        shutil.rmtree(public_path)
-        os.mkdir(public_path)
-        return os.path.exists(public_path)
+def clear_dir(dirpath):
+    if os.path.exists(dirpath) == True:
+        shutil.rmtree(dirpath)
+        os.mkdir(dirpath)
+        return os.path.exists(dirpath)
     else:
-        raise Exception("no dir at static_site/public/")
+        raise Exception(f"no dir at {dirpath}")
 
-def copy_static_dir():
+def copy_static_dir(dirpath):
     if os.path.exists(static_path) == True:
-        copy_dir_to_dir(static_path, public_path)
-        return os.path.exists(public_path)
+        copy_dir_to_dir(static_path, dirpath)
+        return os.path.exists(dirpath)
     else:
         raise Exception("no dir at static_site/static/")
 
@@ -35,14 +35,14 @@ def copy_dir_to_dir(old_path, target_path):
                 os.mkdir(new_path)
             copy_dir_to_dir(path, new_path)
 
-def public_to_static():
+def dir_to_static(dirpath):
     try:
-        if clear_public() == True:
-            print("public cleared!")
+        if clear_dir(dirpath) == True:
+            print("dir cleared!")
     except Exception as e:
         print(e)
-        if not os.path.exists(public_path):
-            os.mkdir(public_path)
+        if not os.path.exists(dirpath):
+            os.mkdir(dirpath)
     try:
         if copy_static_dir() == True:
             print("static copied to public!")
