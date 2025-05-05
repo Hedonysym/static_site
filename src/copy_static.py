@@ -44,7 +44,7 @@ def dir_to_static(dirpath):
         if not os.path.exists(dirpath):
             os.mkdir(dirpath)
     try:
-        if copy_static_dir() == True:
+        if copy_static_dir(dirpath) == True:
             print("static copied to public!")
     except Exception as e:
         print(e)
