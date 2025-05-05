@@ -150,3 +150,10 @@ def quote_to_html_node(block):
     children = text_to_children(content)
     return ParentNode("blockquote", children)
 
+def extract_title(md):
+    lines = md.splitlines()
+    for line in lines:
+        if re.match(r"^#\s.*", line) != None:
+            return line[2:]
+    raise Exception("header 1 not found")
+
