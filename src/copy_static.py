@@ -15,9 +15,13 @@ def clear_dir(dirpath):
         return os.path.exists(dirpath)
     else:
         raise Exception(f"no dir at {dirpath}")
+        raise Exception(f"no dir at {dirpath}")
 
 def copy_static_dir(dirpath):
+def copy_static_dir(dirpath):
     if os.path.exists(static_path) == True:
+        copy_dir_to_dir(static_path, dirpath)
+        return os.path.exists(dirpath)
         copy_dir_to_dir(static_path, dirpath)
         return os.path.exists(dirpath)
     else:
@@ -35,12 +39,14 @@ def copy_dir_to_dir(old_path, target_path):
                 os.mkdir(new_path)
             copy_dir_to_dir(path, new_path)
 
-def public_to_static(dirpath):
+def dir_to_static(dirpath):
     try:
         if clear_dir(dirpath) == True:
-            print("public cleared!")
+            print("dir cleared!")
     except Exception as e:
         print(e)
+        if not os.path.exists(dirpath):
+            os.mkdir(dirpath)
         if not os.path.exists(dirpath):
             os.mkdir(dirpath)
     try:

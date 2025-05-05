@@ -5,7 +5,7 @@ import os
 base_dir = os.path.dirname(__file__)
 project_root = os.path.abspath(os.path.join(base_dir, "../"))
 
-def generate_page(from_path, template_path, dest_path, basepath):
+def generate_page(from_path, template_path, dest_path):
     print(f"Generating page from {from_path} to {dest_path} using {template_path}")
 
     with open(from_path, "r", encoding="utf-8") as mdfile:
@@ -16,9 +16,12 @@ def generate_page(from_path, template_path, dest_path, basepath):
     title = extract_title(mdtext)
     htmlnodes = markdown_to_html_node(mdtext)
     content = htmlnodes.to_html()
-    html = htmltemplate.replace("{{ Title }}", title).replace("{{ Content }}", content)
-    new_html = html.replace('href="/', f'href="{basepath}').replace('src="/', f'src="{basepath}')
-
+    new_html = htmltemplate.replace("{{ Title }}", title).replace("{{ Content }}", content).replace(
+        'href="/', f'href"{basepath}'
+    ).replace(
+        'src="/', f'src="{basepath}'
+    )
+    
     newpath = dest_path.replace(".md", ".html")
     os.makedirs(os.path.dirname(newpath), exist_ok=True)
     with open(newpath, "w", encoding="utf-8") as file:
