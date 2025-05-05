@@ -4,7 +4,10 @@ import generate_pages
 
 def main():
    copy_static.public_to_static()
-   generate_pages.generate_page("content/index.md", "template.html", "public/index.html")
+   contentpath = generate_pages.extend_path_to_root("content")
+   templatepath = generate_pages.extend_path_to_root("template.html")
+   publicpath = generate_pages.extend_path_to_root("public")
+   generate_pages.generate_pages_recursive(contentpath, templatepath, publicpath)
 
 
 
