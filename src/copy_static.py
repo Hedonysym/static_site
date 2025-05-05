@@ -35,10 +35,24 @@ def copy_dir_to_dir(old_path, target_path):
                 os.mkdir(new_path)
             copy_dir_to_dir(path, new_path)
 
+<<<<<<< HEAD
 def dir_to_static(dirpath):
     try:
         if clear_dir(dirpath) == True:
             print("dir cleared!")
+=======
+<<<<<<< HEAD
+def public_to_static(dirpath):
+    try:
+        if clear_dir(dirpath) == True:
+            print("public cleared!")
+=======
+def dir_to_static(dirpath):
+    try:
+        if clear_dir(dirpath) == True:
+            print("dir cleared!")
+>>>>>>> 2de3777 (maybe fix?)
+>>>>>>> 61c0c31 (maybe fix?)
     except Exception as e:
         print(e)
         if not os.path.exists(dirpath):

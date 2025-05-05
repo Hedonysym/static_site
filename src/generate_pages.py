@@ -16,7 +16,22 @@ def generate_page(from_path, template_path, dest_path, basepath):
     title = extract_title(mdtext)
     htmlnodes = markdown_to_html_node(mdtext)
     content = htmlnodes.to_html()
+<<<<<<< HEAD
     new_html = htmltemplate.replace("{{ Title }}", title).replace("{{ Content }}", content).replace('href="/', f'href="{basepath}').replace('src="/', f'src="{basepath}')
+=======
+<<<<<<< HEAD
+    html = htmltemplate.replace("{{ Title }}", title).replace("{{ Content }}", content)
+    new_html = html.replace('href="/', f'href="{basepath}').replace('src="/', f'src="{basepath}')
+
+=======
+    new_html = htmltemplate.replace("{{ Title }}", title).replace("{{ Content }}", content).replace(
+        'href="/', f'href"{basepath}'
+    ).replace(
+        'src="/', f'src="{basepath}'
+    )
+    
+>>>>>>> 2de3777 (maybe fix?)
+>>>>>>> 61c0c31 (maybe fix?)
     newpath = dest_path.replace(".md", ".html")
     os.makedirs(os.path.dirname(newpath), exist_ok=True)
     with open(newpath, "w", encoding="utf-8") as file:
